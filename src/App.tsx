@@ -1,13 +1,13 @@
 import React from 'react'
+import Container from './components/Container'
+import Header from './components/Header'
 
 function App() {
   return (
-    <>
-    <h1 className="text-3xl font-bold underline"> hello </h1>
-    <h2>
-      world!
-    </h2>
-    </>
+    <Container>
+      <Header />
+      <h2>pipipi popopo</h2>
+    </Container>
   )
 }
 
