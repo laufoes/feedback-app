@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import Card from './components/Card'
 import Container from './components/Container'
 import FeedbackList from './components/FeedbackList'
 import Header from './components/Header'
@@ -9,9 +10,7 @@ function App() {
   return (
     <Container>
       <Header />
-      <div className="container max-w-3xl m-auto py-0 px-5">
         <FeedbackList feedback={feedback} />
-      </div>
     </Container>
   )
 }
