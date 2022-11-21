@@ -1,16 +1,17 @@
-import React, { useState } from 'react'
-import Card from './components/Card'
+import React from 'react'
 import Container from './components/Container'
 import FeedbackList from './components/FeedbackList'
 import Header from './components/Header'
-import FeedbackData from './data/FeedbackData'
+import { FeedbackDataProvider } from './context/FeedbackContext'
 
 function App() {
-  const [ feedback, setFeedback ] = useState(FeedbackData)
   return (
     <Container>
-      <Header />
-        <FeedbackList feedback={feedback} />
+        <FeedbackDataProvider>
+          <Header />
+          <FeedbackList />
+
+      </FeedbackDataProvider>
     </Container>
   )
 }

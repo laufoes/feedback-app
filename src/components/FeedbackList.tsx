@@ -1,16 +1,11 @@
+import { useContext } from 'react'
+import { FeedbackContext, FeedbackDataProps } from '../context/FeedbackContext';
 import FeedbackItem from "./FeedbackItem";
 
-interface FeedbackListProp {
-    feedback: {
-        id: number;
-        rating: number;
-        text: string;
-    }[]
-};
+function FeedbackList() {
+    const  { feedback, setFeedback } = useContext<FeedbackDataProps>(FeedbackContext);
 
-
-function FeedbackList({ feedback }: FeedbackListProp) {
-    if (!feedback || feedback.length === 0) {
+    if ( !feedback.values || feedback.length === 0) {
         return <p>No feedback available yet.</p>
     }
 
