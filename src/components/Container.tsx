@@ -2,7 +2,7 @@ import { ReactNode } from 'react'
 
 function PageContainer({ children }: { children: JSX.Element[] | JSX.Element | ReactNode}) {
   return (
-    <div className="bg-primary h-screen text-bodyColor text-xl font-normal pb-5">
+    <div className="bg-primary h-full w-screen overflow-x-hidden text-bodyColor text-xl font-normal pb-10">
       { children }
     </div>
   )

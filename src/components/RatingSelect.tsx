@@ -21,17 +21,22 @@ function RatingSelect({ select }: RatingSelectProps) {
   return (
         <ul className='flex flex-wrap justify-around m-auto my-10'>
             {ratings.map((i) => (
-                <li key={`rating-${i}`} className={`relative p-3 bg-bgRating text-center text-lg rounded-full border-disabled transition-all w-[50px] h-[50px] hover:bg-secondary hover:text-white checked:bg-secondary checked:text-white`}>
-                <input
-                    className='hidden'
-                    type='radio'
-                    id={`num${i}`}
-                    name='rating'
-                    value={i}
-                    onChange={handleChange}
-                    checked={selected === i}
-                />
-                <label htmlFor={`num${i}`}>{i}</label>
+                <li key={`rating-${i}`} className='relative'>
+                    <input
+                         className={`appearance-none relative p-3 bg-bgRating text-center text-lg rounded-full border-disabled transition-all w-[50px] h-[50px] cursor-pointer hover:bg-secondary hover:text-white checked:bg-secondary checked:text-white`}
+                        type='radio'
+                        id={`num${i}`}
+                        name='rating'
+                        value={i}
+                        onChange={handleChange}
+                        checked={selected === i}
+                    />
+                    <label
+                        htmlFor={`num${i}`} 
+                        className={`absolute text-xl top-3 ${i === 10 ? 'left-[14px]' : 'left-[18px]'}`}
+                    >
+                        {i}
+                    </label>
                 </li>
             ))}
         </ul>
