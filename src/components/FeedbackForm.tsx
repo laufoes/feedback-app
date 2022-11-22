@@ -32,7 +32,7 @@ function FeedbackForm() {
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        if (text.length > 10) {
+        if (text.length >= 10) {
             const newFeedback = {
                 text,
                 rating,
