@@ -1,4 +1,6 @@
-function Container({ children }: { children: JSX.Element[] | JSX.Element }) {
+import { ReactNode } from 'react'
+
+function PageContainer({ children }: { children: JSX.Element[] | JSX.Element | ReactNode}) {
   return (
     <div className="bg-primary h-screen text-bodyColor text-xl font-normal pb-5">
       { children }
@@ -6,4 +8,4 @@ function Container({ children }: { children: JSX.Element[] | JSX.Element }) {
   )
 }
 
-export default Container
+export default PageContainer
