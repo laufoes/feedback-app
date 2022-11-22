@@ -1,11 +1,19 @@
 import Card from "./Card"
-import { useState } from 'react'
 import Button from "./Button"
+import RatingSelect from "./RatingSelect"
+import { useState, useContext } from 'react'
+import { FeedbackContext, FeedbackDataProps } from "../context/FeedbackContext"
 
 function FeedbackForm() {
     const [ text, setText ] = useState('')
+    const [ rating, setRating ] = useState(10)
     const [ btnDisabled, setBtnDisabled ] = useState(true);
     const [ message, setMessage ] = useState('')
+
+    const {v4 : uuidv4} = require('uuid')
+
+    const  { addFeedback } = useContext<FeedbackDataProps>(FeedbackContext);
+
 
     const handleTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setText(e.target.value)
@@ -21,18 +29,35 @@ function FeedbackForm() {
             setBtnDisabled(false)
         }
     }
+
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
+        if (text.length > 10) {
+            const newFeedback = {
+                text,
+                rating,
+                id: uuidv4(),
+            }
+            addFeedback(newFeedback)
+            setText('')
+        }
+    }
+
   return (
     <Card reverse={true}>
         <h2 className='text-5xl font-bold text-center mt-3 mb-6'>How would you rate your service with us?</h2>
-        <form className='flex justify-between border border-disabled rounded-2xl my-2 py-2 px-2'>
-            <input 
-                type='text' 
-                placeholder='Write a review' 
-                onChange={handleTextChange} 
-                value={text} 
-                className='w-full px-3 text-xl focus:outline-none' 
-            />
-            <Button type='submit' disabled={btnDisabled}>Send</Button>
+        <form onSubmit={handleSubmit}>
+            <RatingSelect select={(rating: number) => setRating(rating)} />
+            <div className='flex justify-between border border-disabled rounded-2xl my-2 py-2 px-2'>
+                <input 
+                    type='text' 
+                    placeholder='Write a review' 
+                    onChange={handleTextChange} 
+                    value={text} 
+                    className='w-full px-3 text-xl focus:outline-none' 
+                />
+                <Button type='submit' disabled={btnDisabled}>Send</Button>
+            </div>
         </form>
         <div className='text-center mt-6 text-purple-500 text-2lg'>
             {message.length !== 0 ? `${message}` : ''}

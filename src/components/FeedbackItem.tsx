@@ -5,7 +5,7 @@ import { FeedbackContext, FeedbackDataProps } from "../context/FeedbackContext";
 
 interface ItemProps {
     item: {
-        id: number;
+        id: string;
         rating: number;
         text: string;
     }
