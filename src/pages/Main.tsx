@@ -5,6 +5,7 @@ import { FeedbackDataProvider } from '../context/FeedbackContext'
 import FeedbackForm from '../components/FeedbackForm'
 import FeedbackStats from '../components/FeedbackStats'
 import FeedbackList from '../components/FeedbackList'
+import AboutIconLink from '../components/AboutIconLink'
 
 function MainPage() {
   return (
@@ -16,6 +17,7 @@ function MainPage() {
               <FeedbackStats />
               <FeedbackList />
             </div>
+            <AboutIconLink />
         </FeedbackDataProvider>
       </PageContainer>
   )
