@@ -1,7 +1,7 @@
 import Card from "./Card"
 import Button from "./Button"
 import RatingSelect from "./RatingSelect"
-import { useState, useContext } from 'react'
+import { useState, useContext, useEffect } from 'react'
 import { FeedbackContext, FeedbackDataProps } from "../context/FeedbackContext"
 
 function FeedbackForm() {
@@ -9,10 +9,16 @@ function FeedbackForm() {
     const [ rating, setRating ] = useState(10)
     const [ btnDisabled, setBtnDisabled ] = useState(true);
     const [ message, setMessage ] = useState('')
+    const  { addFeedback, editFeedback, updateFeedback } = useContext<FeedbackDataProps>(FeedbackContext);
 
     const {v4 : uuidv4} = require('uuid')
 
-    const  { addFeedback } = useContext<FeedbackDataProps>(FeedbackContext);
+    useEffect(() => {
+        if(editFeedback.edit === true) {
+            setBtnDisabled(false)
+            setText(editFeedback.item.text)
+        }
+    }, [editFeedback])
 
 
     const handleTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -38,8 +44,12 @@ function FeedbackForm() {
                 rating,
                 id: uuidv4(),
             }
-            addFeedback(newFeedback)
-            setText('')
+            if(editFeedback.edit === true) {
+                updateFeedback(editFeedback.item.id, newFeedback)
+            } else {
+                addFeedback(newFeedback)
+                setText('')
+            }
         }
     }
 

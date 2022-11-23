@@ -7,11 +7,20 @@ interface IFeedbackData {
         text: string;
 }
 
+interface IEditFeedback {
+    item: { id: string, text: string, rating: number },
+    edit: boolean,
+}
+
 export interface FeedbackDataProps {
     feedback: IFeedbackData[],
     setFeedback: (newState: IFeedbackData[]) => void,
+    editFeedback: IEditFeedback,
+    setEditFeedback: (newState: IEditFeedback) => void,
     deleteFeedback: (id: string) => void,
-    addFeedback: (newFeedback: IFeedbackData) => void
+    addFeedback: (newFeedback: IFeedbackData) => void,
+    editExistingFeedback: (item: IFeedbackData) => void,
+    updateFeedback: (id: string, item: IFeedbackData) => void
 }
 
 interface FeedbackContextProps { 
@@ -21,8 +30,12 @@ interface FeedbackContextProps {
 const initialValues = {
     feedback: FeedbackData,
     setFeedback: () => {},
+    editFeedback: { item: { id: '', text: '', rating: 0}, edit: false },
+    setEditFeedback: () => {},
     deleteFeedback: () => {},
-    addFeedback: () => {}
+    addFeedback: () => {},
+    editExistingFeedback: () => {},
+    updateFeedback: () => {}
 }
 
 export const FeedbackContext = createContext<FeedbackDataProps>(initialValues);
@@ -30,11 +43,25 @@ FeedbackContext.displayName = 'Feedback';
 
 export const FeedbackDataProvider = ({ children }: FeedbackContextProps) => {
     const [ feedback, setFeedback ] = useState(initialValues.feedback);
+    const [ editFeedback, setEditFeedback ] = useState(initialValues.editFeedback)
 
     const addFeedback = (newFeedback: IFeedbackData) => {
         console.log(newFeedback)
         setFeedback([ newFeedback, ...feedback])
 
+    }
+
+    const editExistingFeedback = (item: IFeedbackData) => {
+        setEditFeedback({
+            item,
+            edit: true
+        })
+    }
+
+    const updateFeedback = (id: string, updItem: IFeedbackData) => {
+        setFeedback(feedback.map((item) => (
+            item.id === id ? { ...item, ...updItem } : item
+        )))
     }
 
     const deleteFeedback = (id: string) => {
@@ -44,7 +71,7 @@ export const FeedbackDataProvider = ({ children }: FeedbackContextProps) => {
     }
 
     return (
-        <FeedbackContext.Provider value={{ feedback, setFeedback, deleteFeedback, addFeedback }}>
+        <FeedbackContext.Provider value={{ feedback, setFeedback, editFeedback, setEditFeedback,  deleteFeedback, addFeedback, editExistingFeedback, updateFeedback }}>
             { children }
         </FeedbackContext.Provider>
     )

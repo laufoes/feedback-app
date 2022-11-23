@@ -1,11 +1,17 @@
-import { useState } from 'react'
+import { useState, useContext, useEffect } from 'react'
+import { FeedbackContext, FeedbackDataProps } from '../context/FeedbackContext';
 
 interface RatingSelectProps {
     select:  (rating: number) => void
 }
 
 function RatingSelect({ select }: RatingSelectProps) {
+    const  { editFeedback } = useContext<FeedbackDataProps>(FeedbackContext);
     const [ selected, setSelected ] = useState(10)
+
+    useEffect(() => {
+        setSelected(editFeedback.item.rating)
+    }, [editFeedback])
 
     const ratings = []
     for(var i = 0; i <= 10; i++) {
