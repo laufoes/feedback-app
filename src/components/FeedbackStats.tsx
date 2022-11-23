@@ -11,7 +11,7 @@ function FeedbackStats() {
   const avgRating = average.toFixed(1).replace(/[.,]0$/, '')
 
   return (
-    <div className='flex justify-between font-bold'>
+    <div className='flex justify-between font-bold w-5/6 m-auto lg:w-full'>
         <h4>{ feedback.length } Reviews</h4>
         <h4>Average Rating: {isNaN(average) ? 0 : avgRating}</h4>
     </div>
