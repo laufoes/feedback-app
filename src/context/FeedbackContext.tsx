@@ -1,26 +1,28 @@
-import { useState, createContext, ReactNode } from 'react'
-import FeedbackData from '../data/FeedbackData'
+import { useState, createContext, ReactNode, useEffect } from 'react'
+import axios from 'axios'
 
 interface IFeedbackData {
-        id: string;
+        id: number;
         rating: number;
         text: string;
 }
 
 interface IEditFeedback {
-    item: { id: string, text: string, rating: number },
+    item: { id: number, text: string, rating: number },
     edit: boolean,
 }
 
 export interface FeedbackDataProps {
+    isLoading: boolean,
+    setIsLoading: (newState: boolean) => void,
     feedback: IFeedbackData[],
     setFeedback: (newState: IFeedbackData[]) => void,
     editFeedback: IEditFeedback,
     setEditFeedback: (newState: IEditFeedback) => void,
-    deleteFeedback: (id: string) => void,
+    deleteFeedback: (id: number) => void,
     addFeedback: (newFeedback: IFeedbackData) => void,
     editExistingFeedback: (item: IFeedbackData) => void,
-    updateFeedback: (id: string, item: IFeedbackData) => void
+    updateFeedback: (id: number, item: IFeedbackData) => void
 }
 
 interface FeedbackContextProps { 
@@ -28,9 +30,11 @@ interface FeedbackContextProps {
 }
 
 const initialValues = {
-    feedback: FeedbackData,
+    isLoading: true,
+    setIsLoading: () => {},
+    feedback: [{ id: 0 , rating: 0, text: '' }],
     setFeedback: () => {},
-    editFeedback: { item: { id: '', text: '', rating: 0}, edit: false },
+    editFeedback: { item: { id: 0 , text: '', rating: 0}, edit: false },
     setEditFeedback: () => {},
     deleteFeedback: () => {},
     addFeedback: () => {},
@@ -38,12 +42,30 @@ const initialValues = {
     updateFeedback: () => {}
 }
 
-export const FeedbackContext = createContext<FeedbackDataProps>(initialValues);
-FeedbackContext.displayName = 'Feedback';
+export const FeedbackContext = createContext<FeedbackDataProps>(initialValues)
+FeedbackContext.displayName = 'Feedback'
 
 export const FeedbackDataProvider = ({ children }: FeedbackContextProps) => {
-    const [ feedback, setFeedback ] = useState(initialValues.feedback);
+    const [ isLoading, setIsLoading ] = useState(true)
+    const [ feedback, setFeedback ] = useState(initialValues.feedback)
     const [ editFeedback, setEditFeedback ] = useState(initialValues.editFeedback)
+
+    useEffect(() => {
+        console.log(isLoading)
+
+        fetchFeedback()
+        console.log(isLoading)
+    }, [isLoading])
+
+    async function fetchFeedback() {
+        try {
+            const response = await axios.get('http://localhost:5000/feedback')
+            setFeedback(response.data)
+            setIsLoading(false)                
+        } catch(err) {
+            throw new Error("Couldn't fetch API.")
+        }
+    }
 
     const addFeedback = (newFeedback: IFeedbackData) => {
         console.log(newFeedback)
@@ -58,20 +80,20 @@ export const FeedbackDataProvider = ({ children }: FeedbackContextProps) => {
         })
     }
 
-    const updateFeedback = (id: string, updItem: IFeedbackData) => {
+    const updateFeedback = (id: number, updItem: IFeedbackData) => {
         setFeedback(feedback.map((item) => (
             item.id === id ? { ...item, ...updItem } : item
         )))
     }
 
-    const deleteFeedback = (id: string) => {
+    const deleteFeedback = (id: number) => {
         if(window.confirm('Are you sure you wish to delete your feedback?')) {
             setFeedback(feedback.filter((item) => item.id !== id))
         }
     }
 
     return (
-        <FeedbackContext.Provider value={{ feedback, setFeedback, editFeedback, setEditFeedback,  deleteFeedback, addFeedback, editExistingFeedback, updateFeedback }}>
+        <FeedbackContext.Provider value={{ isLoading, setIsLoading, feedback, setFeedback, editFeedback, setEditFeedback,  deleteFeedback, addFeedback, editExistingFeedback, updateFeedback }}>
             { children }
         </FeedbackContext.Provider>
     )
