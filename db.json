@@ -1,19 +1,19 @@
 {
-    "feedback": [
-        {
-            "id": 1,
-            "rating": 10,
-            "text": "This is feedback item no. 1 coming from the backend."
-        },
-        {
-            "id": 2,
-            "rating": 6,
-            "text": "This is feedback item no. 2 coming from the backend."
-        },
-        {
-            "id": 3,
-            "rating": 8,
-            "text": "This is feedback item no. 3 coming from the backend."
-        }
-    ]
+  "feedback": [
+    {
+      "id": 1,
+      "rating": 10,
+      "text": "This is feedback item no. 1 coming from the backend."
+    },
+    {
+      "rating": 10,
+      "text": "This is feedback item no. 2 coming from the backend.",
+      "id": 2
+    },
+    {
+      "id": 3,
+      "rating": 8,
+      "text": "This is feedback item no. 3 coming from the backend."
+    }
+  ]
 }

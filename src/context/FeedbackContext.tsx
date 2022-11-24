@@ -51,15 +51,12 @@ export const FeedbackDataProvider = ({ children }: FeedbackContextProps) => {
     const [ editFeedback, setEditFeedback ] = useState(initialValues.editFeedback)
 
     useEffect(() => {
-        console.log(isLoading)
-
         fetchFeedback()
-        console.log(isLoading)
     }, [isLoading])
 
     async function fetchFeedback() {
         try {
-            const response = await axios.get('http://localhost:5000/feedback')
+            const response = await axios.get('/feedback')
             setFeedback(response.data)
             setIsLoading(false)                
         } catch(err) {
@@ -67,8 +64,15 @@ export const FeedbackDataProvider = ({ children }: FeedbackContextProps) => {
         }
     }
 
-    const addFeedback = (newFeedback: IFeedbackData) => {
-        console.log(newFeedback)
+    async function addFeedback(newFeedback: { id: number, rating: number, text: string }) {
+        const { id, rating, text } = newFeedback
+        try {
+            await axios.post('/feedback', {
+                id, rating, text
+            })
+        } catch(err) {
+            throw new Error("Couldn't add review, try again later.")
+        }
         setFeedback([ newFeedback, ...feedback])
 
     }
@@ -80,15 +84,32 @@ export const FeedbackDataProvider = ({ children }: FeedbackContextProps) => {
         })
     }
 
-    const updateFeedback = (id: number, updItem: IFeedbackData) => {
-        setFeedback(feedback.map((item) => (
-            item.id === id ? { ...item, ...updItem } : item
-        )))
+    async function updateFeedback(id: number, updItem: IFeedbackData) {
+        const { rating, text } = updItem
+        try {
+            await axios.put(`/feedback/${id}`,  {
+                rating, text
+            })
+
+            setFeedback(feedback.map((item) => (
+                item.id === id ? { ...item, ...updItem } : item
+            )))
+        } catch(err) {
+            throw new Error("Couldn't update the feedback.")
+        }
     }
 
-    const deleteFeedback = (id: number) => {
+    async function deleteFeedback(id: number) {
         if(window.confirm('Are you sure you wish to delete your feedback?')) {
-            setFeedback(feedback.filter((item) => item.id !== id))
+            try{
+                await axios.delete(`/feedback/${id}`)
+                    .then (() => {
+                        setFeedback(feedback.filter((item) => item.id !== id))
+                    })
+            } catch(err) {
+                throw new Error("Error deleting review.")
+            }
+
         }
     }
 

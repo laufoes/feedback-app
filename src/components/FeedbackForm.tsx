@@ -9,9 +9,7 @@ function FeedbackForm() {
     const [ rating, setRating ] = useState(10)
     const [ btnDisabled, setBtnDisabled ] = useState(true);
     const [ message, setMessage ] = useState('')
-    const  { addFeedback, editFeedback, updateFeedback } = useContext<FeedbackDataProps>(FeedbackContext);
-
-    const {v4 : uuidv4} = require('uuid')
+    const  { feedback, addFeedback, editFeedback, updateFeedback } = useContext<FeedbackDataProps>(FeedbackContext);
 
     useEffect(() => {
         if(editFeedback.edit === true) {
@@ -39,10 +37,12 @@ function FeedbackForm() {
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         if (text.length >= 10) {
+            const id = feedback.length + 1;
+            console.log(id)
             const newFeedback = {
                 text,
                 rating,
-                id: uuidv4(),
+                id
             }
             if(editFeedback.edit === true) {
                 updateFeedback(editFeedback.item.id, newFeedback)
